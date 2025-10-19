@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react"
 import { apiToken } from "../api/ApiKey"
+import {Link, useSearchParams} from "react-router-dom"
 
 export default function Home(){
 
     const baseUrl = 'https://api.themoviedb.org/3'
-    const [input, setInput] = useState(null)
+    const [searchInput, setSearchInput] = useState(null)
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [page, setPage] = useState(1)
     const [films, setFilms] = useState([])
 
     useEffect(() => {
@@ -16,8 +19,8 @@ export default function Home(){
             }
         }
 
-        if(input){
-            fetch(`${baseUrl}/search/movie?query=${input}&include_adult=false`,option)
+        if(searchInput){
+            fetch(`${baseUrl}/search/movie?query=${searchInput}&include_adult=false&page=${page}`,option)
                 .then(
                     res => {
                         if(!res.ok) {
@@ -32,11 +35,14 @@ export default function Home(){
                 })
                 .catch(err => console.log(err.message))
         }
-    },[input])
+    },[searchInput])
 
     function search(formData){
         const query = formData.get("query")
-        setInput(query)
+        if(query !== ""){
+            setSearchInput(query)
+            setSearchParams({search:query})
+        }
     }
 
     return (
@@ -46,16 +52,13 @@ export default function Home(){
                     type="search" 
                     placeholder="Search the film"
                     name="query"
-                    />
+                    />  
                 <button type="submit">Search</button>
+
             </form>
             <div className="imgs-container">
                 {films.length > 0 && films.map((film) =>{
-                    return (
-                        film.poster_path 
-                        ? <img src={`https://image.tmdb.org/t/p/w500${film.poster_path}`} />
-                        : <div className="no-film-poster"></div>
-                    )
+                    return <img src={`https://image.tmdb.org/t/p/w500${film.poster_path}`} alt={film.title} className="poster"/> 
                 })}
             </div>
         </div>

@@ -149,11 +149,14 @@ nav a{
 .imgs-container > img{
 	display: inline-block;
 	border-radius: 2px;
-	width: 100px;
-	height: 150px;
+	width: 200px;
+	height: 300px;
 }
 
-.imgs-container .no-film-poster{
+.imgs-container .poster{
 	border: 2px solid white;
 	border-radius: 2px;
+	color: white;
+	text-align: center;
 }
+
