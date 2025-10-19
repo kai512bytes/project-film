@@ -8,6 +8,7 @@ export default function Home(){
     const [searchInput, setSearchInput] = useState(null)
     const [searchParams, setSearchParams] = useSearchParams()
     const [page, setPage] = useState(1)
+    const [lastPage, setLastPage] = useState(null)
     const [films, setFilms] = useState([])
 
     useEffect(() => {
@@ -31,18 +32,30 @@ export default function Home(){
                 )
                 .then(data => {
                     console.log(data)
+                    setLastPage(data.total_pages)
                     setFilms(data.results)
                 })
                 .catch(err => console.log(err.message))
         }
-    },[searchInput])
+    },[searchInput, page])
 
     function search(formData){
         const query = formData.get("query")
         if(query !== ""){
             setSearchInput(query)
             setSearchParams({search:query})
+            console.log(searchParams)
         }
+    }
+
+    function genNewSearchParamString(key, value){
+        const newSP = new URLSearchParams(searchParams)
+        if(value == null){
+            newSP.delete(key)
+        }else{
+            newSP.set(key, value)
+        }
+        return `?${newSP.toString()}`
     }
 
     return (
@@ -61,6 +74,33 @@ export default function Home(){
                     return <img src={`https://image.tmdb.org/t/p/w500${film.poster_path}`} alt={film.title} className="poster"/> 
                 })}
             </div>
+            {
+                searchInput && (
+                    <nav aria-label="pagination">
+                        <ul>
+                            {
+                                page > 1 &&(
+                                <li>   
+                                        <Link to="..">
+                                            <span aria-hidden="true">Previous</span>
+                                        </Link>
+                                    </li>                       
+                                )
+                            }
+                            {
+                                page < lastPage &&(
+                                    <li>
+                                        <Link to={`${genNewSearchParamString("search", searchInput)}/${page}`} onClick={() => setPage(page + 1)}>
+                                        <span aria-hidden="true">Next</span>
+                                        </Link>
+                                    </li>
+                                )                    
+                            }
+                        </ul>
+                    </nav>
+                )
+            }
+            
         </div>
     )
 }

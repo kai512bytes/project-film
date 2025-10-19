@@ -150,7 +150,8 @@ nav a{
 	display: inline-block;
 	border-radius: 2px;
 	width: 200px;
-	height: 300px;
+	height: calc(200px * 1.5);
+	object-fit: cover;
 }
 
 .imgs-container .poster{
