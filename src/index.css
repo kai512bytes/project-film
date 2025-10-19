@@ -1,12 +1,108 @@
+/* Color Theme Swatches in Hex */
+.wes-1-hex { color: #0F212D; }
+.wes-2-hex { color: #00314F; }
+.wes-3-hex { color: #2E82A6; }
+.wes-4-hex { color: #6CA5AE; }
+.wes-5-hex { color: #979FA2; }
+.wes-6-hex { color: #E5F1D9; }
+.wes-7-hex { color: #DCD4A5; }
+.wes-8-hex { color: #B4A387; }
+.wes-9-hex { color: #D38C86; }
+.wes-10-hex { color: #784941; }
+
+/* Color Theme Swatches in RGBA */
+.wes-1-rgba { color: rgba(15, 33, 45, 1); }
+.wes-2-rgba { color: rgba(0, 49, 79, 1); }
+.wes-3-rgba { color: rgba(46, 130, 166, 1); }
+.wes-4-rgba { color: rgba(108, 165, 174, 1); }
+.wes-5-rgba { color: rgba(151, 159, 162, 1); }
+.wes-6-rgba { color: rgba(229, 241, 217, 1); }
+.wes-7-rgba { color: rgba(220, 212, 165, 1); }
+.wes-8-rgba { color: rgba(180, 163, 135, 1); }
+.wes-9-rgba { color: rgba(211, 140, 134, 1); }
+.wes-10-rgba { color: rgba(120, 73, 65, 1); }
+
+/* Color Theme Swatches in HSLA */
+.wes-1-hsla { color: hsla(204, 50, 11, 1); }
+.wes-2-hsla { color: hsla(202, 100, 15, 1); }
+.wes-3-hsla { color: hsla(198, 56, 41, 1); }
+.wes-4-hsla { color: hsla(188, 28, 55, 1); }
+.wes-5-hsla { color: hsla(196, 5, 61, 1); }
+.wes-6-hsla { color: hsla(89, 46, 89, 1); }
+.wes-7-hsla { color: hsla(51, 44, 75, 1); }
+.wes-8-hsla { color: hsla(37, 23, 61, 1); }
+.wes-9-hsla { color: hsla(4, 46, 67, 1); }
+.wes-10-hsla { color: hsla(8, 29, 36, 1); }
+
+@property --theme-color{
+	syntax: "<color>";
+	inherits: false;
+	initial-value: rgba(27, 50, 64, 1);
+}
+
 body{
-  margin: 0;
-  padding: 0;
+	--theme-main-dark: #0F212D;
+	--theme-main-medium: #00314F;
+	--theme-main-light: #2E82A6;
+	--theme-main-extra-light: #6CA5AE;
+	--theme-main-gray: #979FA2;
+	--theme-secondary-1: #E5F1D9;
+	--theme-secondary-2: #DCD4A5;
+	--theme-secondary-3: #B4A387;
+	--theme-secondary-4: #D38C86;
+	--themer-secondary-dark: #784941;
+	
+	margin: 0;
+	padding: 0; 
+	height: 100vh;
+	background-color: #121212;
+}
+
+.site-wrapper{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+header{
+	height: 30vh;
+	background-image:
+  		linear-gradient(to bottom, rgba(255,255,255,0.125), var(--theme-main-dark)), 
+		url(./assets/film-bg.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: right 50% top 30%;
+	display: flex;
+}
+
+footer{
+	padding: 2rem;
+}
+
+footer > h1{
+	color: white;
+	margin: 0;
+	text-align: center;
 }
 
 header nav{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 5rem;
+}
+
+nav a{
+	text-decoration: none;
+	color: white;
+}
+
+
+.site-link > a{
+	font-size: 1rem;
+	margin: 1.5rem;
 }
 
 .logo{
@@ -14,7 +110,50 @@ header nav{
   align-items: center;
 }
 
-.logo > p{
+.logo > h1{
   padding: 0;
-  margin: 0;
+  font-size: 2rem;
+}
+
+.site-content{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 5rem;
+}
+
+.search-box{
+	align-self: center;
+	margin-bottom: 3rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.search-box > input{
+	width: 75%;
+	height: 2rem;
+}
+
+.search-box > button{
+	width: 25%;
+}
+
+.site-content .imgs-container{
+	display: grid;
+	grid-template-columns: repeat(4,1fr);
+	grid-column-gap: 0.5rem;
+	grid-row-gap: 0.5rem;
+}
+
+.imgs-container > img{
+	display: inline-block;
+	border-radius: 2px;
+	width: 100px;
+	height: 150px;
+}
+
+.imgs-container .no-film-poster{
+	border: 2px solid white;
+	border-radius: 2px;
 }
