@@ -8,7 +8,7 @@ export default function Search(){
     const param = useParams()
     const currentPage = Number(param.page)
     const [rawData, setRawData] = useState({})
-    const [filmsParam, setFilmsParam] = useState([])
+    const [filmInfos, setFilmInfos] = useState([])
 
     useEffect(() => {
         const option = {
@@ -32,30 +32,23 @@ export default function Search(){
                 .then(data => {
                     setRawData(data)
 
-                    const newParam = data.results.map(film => ({
-                        title: film.title,
-                        param: formateTitle(film.title),
-                        id: film.id,
-                        poster: film.poster_path
+                    const filmDatas = data.results.map(film => ({
+                        ...film,
+                        param: formateTitle(film.title)
                     }))
                     
-                    setFilmsParam(newParam)
+                    setFilmInfos(filmDatas)
                 })
                 .catch(err => console.error(err.message))
         }
     },[param.film, currentPage])
 
-    function handleClick(e){
-        if(e.target.name === "prev"){
-            setSearchParams(page - 1)
-        }
-        if(e.target.name === "next"){
-            setSearchParams(page + 1)
-        }
-    }
-
     function formateTitle(title){
         return title.replace(/\s+/g, "-").toLowerCase()
+    }
+
+    if(filmInfos){
+        console.log(filmInfos)
     }
 
     return(
@@ -63,10 +56,14 @@ export default function Search(){
             <h1>This is {param.film} film on {param.page} page</h1>
             <div className="imgs-container">
                 {
-                    filmsParam?.map(film => {
+                    filmInfos?.map(film => {
                         return(
-                            <Link to={`/film/${film.param}`} key={film.id} state={{title: film.title}}>
-                                <img src={`https://image.tmdb.org/t/p/w500${film.poster}`} alt={film.title} className="poster" />
+                            <Link to={`/film/${film.param ?? film.id}`} key={film.id} state={
+                                {
+                                    ...film
+                                }
+                            }>
+                                <img src={`https://image.tmdb.org/t/p/w500${film.poster_path}`} alt={film.title} className="poster" />
                             </Link>
                         )
                     })
