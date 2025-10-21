@@ -1,4 +1,4 @@
-import { useParams, Link, useSearchParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { useState, useEffect } from "react";
 import { apiToken } from "../api/ApiKey";
 
@@ -7,7 +7,8 @@ const baseUrl = 'https://api.themoviedb.org/3'
 export default function Search(){
     const param = useParams()
     const currentPage = Number(param.page)
-    const [filmInfo, setFilmInfo] = useState({})
+    const [rawData, setRawData] = useState({})
+    const [filmsParam, setFilmsParam] = useState([])
 
     useEffect(() => {
         const option = {
@@ -19,7 +20,7 @@ export default function Search(){
         }
 
         if(param){
-            fetch(`${baseUrl}/search/movie?query=${param.searchInput}&include_adult=false&page=${currentPage}`,option)
+            fetch(`${baseUrl}/search/movie?query=${param.film}&include_adult=false&page=${currentPage}`,option)
                 .then(
                     res => {
                         if(!res.ok) {
@@ -29,12 +30,20 @@ export default function Search(){
                     }
                 )
                 .then(data => {
-                    console.log(data)
-                    setFilmInfo(data)
+                    setRawData(data)
+
+                    const newParam = data.results.map(film => ({
+                        title: film.title,
+                        param: formateTitle(film.title),
+                        id: film.id,
+                        poster: film.poster_path
+                    }))
+                    
+                    setFilmsParam(newParam)
                 })
                 .catch(err => console.error(err.message))
         }
-    },[param.searchInput, currentPage])
+    },[param.film, currentPage])
 
     function handleClick(e){
         if(e.target.name === "prev"){
@@ -45,17 +54,27 @@ export default function Search(){
         }
     }
 
+    function formateTitle(title){
+        return title.replace(/\s+/g, "-").toLowerCase()
+    }
+
     return(
         <div className="site-content">
-            <h1 style={{color: "white"}}>This is {param.searchInput} film on {param.page} page</h1>
+            <h1>This is {param.film} film on {param.page} page</h1>
             <div className="imgs-container">
-                {filmInfo.results?.length > 0 && filmInfo.results.map((film) =>{
-                    return <img src={`https://image.tmdb.org/t/p/w500${film.poster_path}`} alt={film.title} key={film.id} className="poster"/> 
-                })}
+                {
+                    filmsParam?.map(film => {
+                        return(
+                            <Link to={`/film/${film.param}`} key={film.id} state={{title: film.title}}>
+                                <img src={`https://image.tmdb.org/t/p/w500${film.poster}`} alt={film.title} className="poster" />
+                            </Link>
+                        )
+                    })
+                }
             </div>
             <nav aria-label="pagination">
-                {currentPage !== 1 && <Link to={`/search/${param.searchInput}/page/${currentPage - 1}`}>Previous</Link>}
-                {filmInfo.page < filmInfo.total_pages && <Link to={`/search/${param.searchInput}/page/${currentPage + 1}`}>Next</Link>}
+                {currentPage !== 1 && <Link to={`/search/${param.film}/page/${currentPage - 1}`}>Previous</Link>}
+                {rawData.page < rawData.total_pages && <Link to={`/search/${param.film}/page/${currentPage + 1}`}>Next</Link>}
             </nav>
         </div>
 
