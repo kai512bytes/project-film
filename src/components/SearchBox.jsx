@@ -1,9 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function SearchBox(){
     
     const [searchInput, setSearchInput] = useState("")
+	const {film} = useParams()
+
+    function generateLinkString(searchInput){
+		if(searchInput === ""){
+			return "/search/page/notfound"
+		}
+		return `/search/${searchInput}/page/1`
+    }
 
     return(
         <form className="search-box">
@@ -13,7 +21,9 @@ export default function SearchBox(){
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 />  
-            <Link to={`/search/${searchInput}/page/1`}>Search</Link>
+            <Link to={generateLinkString(searchInput)}>Search</Link>
         </form>
     )
 }
+
+//searchBox empty string issue
