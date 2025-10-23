@@ -8,7 +8,7 @@ export default function Layout(){
     return (
         <div className="site-wrapper">
             <Header />
-            <main className="site-content">
+            <main className="site-content-global">
                 <Outlet />
             </main>
             <Footer />
