@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SearchBox(){
     
     const [searchInput, setSearchInput] = useState("")
-	const {film} = useParams()
+
 
     function generateLinkString(searchInput){
 		if(searchInput === ""){
 			return "/search/page/notfound"
 		}
-		return `/search/${searchInput}/page/1`
+        const formattingInput = searchInput.replace(/\s+/g, "-").toLowerCase()
+		return `/search/${formattingInput}/page/1`
     }
 
     return(
