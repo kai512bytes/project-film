@@ -1,14 +1,18 @@
-import { useLocation } from "react-router-dom"
+import { useLocation, Link } from "react-router-dom"
 
 const imgUrl = "https://image.tmdb.org/t/p/w500"
 
 export default function Film(){
     const location = useLocation()
     console.log(location)
+	const searchParam ={
+		film: location.state.searchParam.film,
+		page: location.state.searchParam.page
+	}
 
     return (
         <div className="site-content">
-            <p>Back to search page</p> {/*using Link to search page*/}
+            <Link to={`/search/${searchParam.film}/page/${searchParam.page}`}>Back to search page</Link> {/*using Link to search page*/}
             <section>
                 <div className="film-img-container">
                     <img src={`${imgUrl}${location.state.poster_path}`} alt={location.state.title} className="poster"/>
